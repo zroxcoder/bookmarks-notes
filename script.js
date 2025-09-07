@@ -195,6 +195,7 @@ function switchProfile() {
 
 function exportData() {
   const data = {
+    profileName: currentProfile, // add this line
     notes: getData('notes'),
     bookmarks: getData('bookmarks'),
     videos: getData('videos'),
@@ -209,16 +210,26 @@ function exportData() {
   URL.revokeObjectURL(url);
 }
 
+
 function importData(event) {
   const file = event.target.files[0];
   if (!file) return;
   const reader = new FileReader();
   reader.onload = function(e) {
     const data = JSON.parse(e.target.result);
+
+    // Set profile name from imported data if available
+    if (data.profileName) {
+      currentProfile = data.profileName;
+      localStorage.setItem('currentProfile', currentProfile);
+      document.getElementById('profileName').value = currentProfile;
+    }
+
     if (data.notes) saveData('notes', data.notes);
     if (data.bookmarks) saveData('bookmarks', data.bookmarks);
     if (data.videos) saveData('videos', data.videos);
     if (data.theme) localStorage.setItem(getKey('theme'), data.theme);
+    
     renderAll();
     alert(`Data imported successfully for profile: ${currentProfile}`);
   };
