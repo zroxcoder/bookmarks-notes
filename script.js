@@ -27,8 +27,9 @@ tabs.forEach(btn => {
   });
 });
 
-// ====== LOCAL STORAGE HELPERS ======
+// ====== PROFILE & LOCAL STORAGE ======
 let currentProfile = localStorage.getItem('currentProfile') || 'defaultUser';
+document.getElementById('profileName').value = currentProfile;
 
 function getKey(key) {
   return `${key}_${currentProfile}`;
@@ -40,6 +41,15 @@ function getData(key) {
 
 function saveData(key, data) {
   localStorage.setItem(getKey(key), JSON.stringify(data));
+}
+
+function switchProfile() {
+  const name = document.getElementById('profileName').value.trim();
+  if (!name) return alert("Profile name cannot be empty!");
+  currentProfile = name;
+  localStorage.setItem('currentProfile', currentProfile);
+  renderAll();
+  alert(`Switched to profile: ${currentProfile}`);
 }
 
 // ====== NOTES ======
@@ -136,7 +146,7 @@ function addVideo() {
   renderVideos();
 }
 
-// ====== COMMON FUNCTIONS ======
+// ====== COMMON ======
 function deleteItem(type, index) {
   const data = getData(type);
   data.splice(index, 1);
@@ -181,21 +191,10 @@ document.getElementById("searchInput").addEventListener("input", (e) => {
   });
 });
 
-// ====== PROFILE FUNCTIONS ======
-document.getElementById('profileName').value = currentProfile;
-
-function switchProfile() {
-  const name = document.getElementById('profileName').value.trim();
-  if (!name) return alert("Profile name cannot be empty!");
-  currentProfile = name;
-  localStorage.setItem('currentProfile', currentProfile);
-  renderAll();
-  alert(`Switched to profile: ${currentProfile}`);
-}
-
+// ====== EXPORT / IMPORT ======
 function exportData() {
   const data = {
-    profileName: currentProfile, // add this line
+    profileName: currentProfile,
     notes: getData('notes'),
     bookmarks: getData('bookmarks'),
     videos: getData('videos'),
@@ -210,7 +209,6 @@ function exportData() {
   URL.revokeObjectURL(url);
 }
 
-
 function importData(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -218,7 +216,6 @@ function importData(event) {
   reader.onload = function(e) {
     const data = JSON.parse(e.target.result);
 
-    // Set profile name from imported data if available
     if (data.profileName) {
       currentProfile = data.profileName;
       localStorage.setItem('currentProfile', currentProfile);
@@ -229,7 +226,7 @@ function importData(event) {
     if (data.bookmarks) saveData('bookmarks', data.bookmarks);
     if (data.videos) saveData('videos', data.videos);
     if (data.theme) localStorage.setItem(getKey('theme'), data.theme);
-    
+
     renderAll();
     alert(`Data imported successfully for profile: ${currentProfile}`);
   };

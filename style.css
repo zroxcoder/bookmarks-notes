@@ -38,7 +38,6 @@ nav {
   display: flex;
   justify-content: center;
   margin: 1rem 0;
-  flex-wrap: wrap;
 }
 
 .tab-btn {
@@ -100,22 +99,23 @@ main {
   cursor: pointer;
 }
 
-/* ====== Profile Section ====== */
-#profile {
-  display: none; /* hidden by default */
+/* Profile Section */
+#profileSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
 }
 
-#profile.active {
-  display: block;
-}
-
-#profile input {
+#profileSection input {
   padding: 0.5rem;
   border-radius: 6px;
   border: 1px solid #ccc;
 }
 
-#profile button {
+#profileSection button {
   padding: 0.5rem 1rem;
   border-radius: 6px;
   border: none;
@@ -125,10 +125,6 @@ main {
   transition: background 0.3s;
 }
 
-#profile button:hover {
+#profileSection button:hover {
   background: #0056b3;
-}
-
-.profile-actions {
-  margin-top: 1rem;
 }
