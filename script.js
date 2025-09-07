@@ -1,16 +1,13 @@
-// ====== THEME TOGGLE ======
 const themeToggle = document.getElementById("themeToggle");
 
-// ====== PROFILE SETUP ======
-let currentProfile = localStorage.getItem('currentProfile') || 'defaultUser';
-document.getElementById('profileName').value = currentProfile;
+let currentProfile = 'defaultUser';
 
-// profile-aware key helper
+// Profile-aware key helper
 function getKey(key) {
   return `${key}_${currentProfile}`;
 }
 
-// profile-aware localStorage helpers
+// Profile-aware localStorage helpers
 function getData(key) {
   return JSON.parse(localStorage.getItem(getKey(key))) || [];
 }
@@ -18,28 +15,26 @@ function saveData(key, data) {
   localStorage.setItem(getKey(key), JSON.stringify(data));
 }
 
-// Apply saved theme for current profile
-const savedTheme = localStorage.getItem(getKey('theme'));
-if (savedTheme === 'dark') {
-  document.body.classList.add('dark');
-  themeToggle.textContent = "☀️ Light Mode";
-} else {
-  themeToggle.textContent = "🌙 Dark Mode";
-}
-
-// Theme toggle button
-themeToggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark");
-  if (document.body.classList.contains("dark")) {
-    localStorage.setItem(getKey('theme'), 'dark');
+// Theme toggle function
+function applyTheme() {
+  const savedTheme = localStorage.getItem(getKey('theme'));
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark');
     themeToggle.textContent = "☀️ Light Mode";
   } else {
-    localStorage.setItem(getKey('theme'), 'light');
+    document.body.classList.remove('dark');
     themeToggle.textContent = "🌙 Dark Mode";
   }
+}
+
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle('dark');
+  const theme = document.body.classList.contains('dark') ? 'dark' : 'light';
+  localStorage.setItem(getKey('theme'), theme);
+  applyTheme();
 });
 
-// ====== TABS ======
+// Tabs
 const tabs = document.querySelectorAll(".tab-btn");
 const sections = document.querySelectorAll(".tab");
 tabs.forEach(btn => {
@@ -78,7 +73,7 @@ function addNote() {
   notes.push({ text: input.value.trim(), pinned: false });
   saveData("notes", notes);
   input.value = "";
-  renderNotes();
+  renderAll();
 }
 
 // ====== BOOKMARKS ======
@@ -110,7 +105,7 @@ function addBookmark() {
   saveData("bookmarks", bookmarks);
   document.getElementById("bookmarkTitle").value = "";
   document.getElementById("bookmarkURL").value = "";
-  renderBookmarks();
+  renderAll();
 }
 
 // ====== VIDEOS ======
@@ -142,7 +137,7 @@ function addVideo() {
   saveData("videos", videos);
   document.getElementById("videoTitle").value = "";
   document.getElementById("videoURL").value = "";
-  renderVideos();
+  renderAll();
 }
 
 // ====== COMMON FUNCTIONS ======
@@ -159,59 +154,37 @@ function togglePin(type, index) {
   renderAll();
 }
 
-// ====== EDIT FUNCTION ======
+// ====== EDIT ======
 function editItem(type, index) {
   const data = getData(type);
-
   if (type === "notes") {
-    const newText = prompt("Edit your note:", data[index].text);
+    const newText = prompt("Edit note:", data[index].text);
     if (newText) data[index].text = newText;
   }
-
   if (type === "bookmarks") {
     const newTitle = prompt("Edit bookmark title:", data[index].title);
     const newURL = prompt("Edit bookmark URL:", data[index].url);
-    if (newTitle && newURL) {
-      data[index].title = newTitle;
-      data[index].url = newURL;
-    }
+    if (newTitle && newURL) { data[index].title = newTitle; data[index].url = newURL; }
   }
-
   if (type === "videos") {
     const newTitle = prompt("Edit video title:", data[index].title);
     const newURL = prompt("Edit video URL:", data[index].url);
-    if (newTitle && newURL) {
-      data[index].title = newTitle;
-      data[index].url = newURL;
-    }
+    if (newTitle && newURL) { data[index].title = newTitle; data[index].url = newURL; }
   }
-
   saveData(type, data);
   renderAll();
 }
 
-// ====== PROFILE SWITCH ======
+// ====== PROFILE FUNCTIONS ======
 function switchProfile() {
   const name = document.getElementById('profileName').value.trim();
   if (!name) return alert("Profile name cannot be empty!");
   currentProfile = name;
   localStorage.setItem('currentProfile', currentProfile);
-
-  // Apply theme for new profile
-  const savedTheme = localStorage.getItem(getKey('theme'));
-  if (savedTheme === 'dark') {
-    document.body.classList.add('dark');
-    themeToggle.textContent = "☀️ Light Mode";
-  } else {
-    document.body.classList.remove('dark');
-    themeToggle.textContent = "🌙 Dark Mode";
-  }
-
+  applyTheme();
   renderAll();
-  alert(`Switched to profile: ${currentProfile}`);
 }
 
-// ====== EXPORT / IMPORT ======
 function exportData() {
   const data = {
     notes: getData('notes'),
@@ -238,12 +211,7 @@ function importData(event) {
     if (data.bookmarks) saveData('bookmarks', data.bookmarks);
     if (data.videos) saveData('videos', data.videos);
     if (data.theme) localStorage.setItem(getKey('theme'), data.theme);
-
-    // Apply imported theme
-    const importedTheme = localStorage.getItem(getKey('theme'));
-    if (importedTheme === 'dark') document.body.classList.add('dark');
-    else document.body.classList.remove('dark');
-
+    applyTheme();
     renderAll();
     alert(`Data imported successfully for profile: ${currentProfile}`);
   };
@@ -258,5 +226,12 @@ document.getElementById("searchInput").addEventListener("input", (e) => {
   });
 });
 
-// ====== INITIAL RENDER ======
-renderAll();
+// ====== INITIALIZATION ======
+window.onload = function() {
+  const profileInput = document.getElementById('profileName');
+  profileInput.value = localStorage.getItem('currentProfile') || 'defaultUser';
+  currentProfile = profileInput.value;
+  applyTheme();
+  document.getElementById('importFile').addEventListener('change', importData);
+  renderAll();
+};
