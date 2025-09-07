@@ -38,6 +38,7 @@ nav {
   display: flex;
   justify-content: center;
   margin: 1rem 0;
+  flex-wrap: wrap;
 }
 
 .tab-btn {
@@ -99,14 +100,13 @@ main {
   cursor: pointer;
 }
 
-/* ====== PROFILE SECTION ====== */
+/* ====== Profile Section ====== */
 #profile {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 1rem 0;
+  display: none; /* hidden by default */
+}
+
+#profile.active {
+  display: block;
 }
 
 #profile input {
@@ -129,11 +129,6 @@ main {
   background: #0056b3;
 }
 
-
-#profile {
-  display: none; /* hide by default */
-}
-
-#profile.active {
-  display: block; /* show when the tab is active */
+.profile-actions {
+  margin-top: 1rem;
 }

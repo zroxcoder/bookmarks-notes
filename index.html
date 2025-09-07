@@ -12,18 +12,11 @@
     <button id="themeToggle">🌙 Dark Mode</button>
   </header>
 
-  <!-- Profile Section -->
-  <section id="profileSection" class="profile-section">
-    <input type="text" id="profileName" placeholder="Enter profile name">
-    <button onclick="switchProfile()">Switch Profile</button>
-    <button onclick="exportData()">Export Profile</button>
-    <input type="file" id="importFile" accept=".json">
-  </section>
-
   <nav>
     <button class="tab-btn active" data-tab="notes">📝 Notes</button>
     <button class="tab-btn" data-tab="bookmarks">🔖 Bookmarks</button>
     <button class="tab-btn" data-tab="videos">🎬 Videos</button>
+    <button class="tab-btn" data-tab="profile">👤 Profile</button>
   </nav>
 
   <section id="search">
@@ -55,6 +48,18 @@
       <input type="url" id="videoURL" placeholder="YouTube/Vimeo link">
       <button onclick="addVideo()">Add Video</button>
       <div id="videosList" class="item-list"></div>
+    </section>
+
+    <!-- Profile -->
+    <section id="profile" class="tab">
+      <h2>👤 Profile</h2>
+      <input type="text" id="profileName" placeholder="Enter profile name">
+      <button onclick="switchProfile()">Switch Profile</button>
+      <div class="profile-actions">
+        <button onclick="exportData()">Export Profile</button>
+        <input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display:none;">
+        <button onclick="document.getElementById('importFile').click()">Import Profile</button>
+      </div>
     </section>
   </main>
 
