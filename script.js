@@ -1,16 +1,40 @@
 // ====== THEME TOGGLE ======
 const themeToggle = document.getElementById("themeToggle");
-if (localStorage.getItem("theme") === "dark") {
-  document.body.classList.add("dark");
-  themeToggle.textContent = "☀️ Light Mode";
+
+// ====== PROFILE SETUP ======
+let currentProfile = localStorage.getItem('currentProfile') || 'defaultUser';
+document.getElementById('profileName').value = currentProfile;
+
+// profile-aware key helper
+function getKey(key) {
+  return `${key}_${currentProfile}`;
 }
+
+// profile-aware localStorage helpers
+function getData(key) {
+  return JSON.parse(localStorage.getItem(getKey(key))) || [];
+}
+function saveData(key, data) {
+  localStorage.setItem(getKey(key), JSON.stringify(data));
+}
+
+// Apply saved theme for current profile
+const savedTheme = localStorage.getItem(getKey('theme'));
+if (savedTheme === 'dark') {
+  document.body.classList.add('dark');
+  themeToggle.textContent = "☀️ Light Mode";
+} else {
+  themeToggle.textContent = "🌙 Dark Mode";
+}
+
+// Theme toggle button
 themeToggle.addEventListener("click", () => {
   document.body.classList.toggle("dark");
   if (document.body.classList.contains("dark")) {
-    localStorage.setItem("theme", "dark");
+    localStorage.setItem(getKey('theme'), 'dark');
     themeToggle.textContent = "☀️ Light Mode";
   } else {
-    localStorage.setItem("theme", "light");
+    localStorage.setItem(getKey('theme'), 'light');
     themeToggle.textContent = "🌙 Dark Mode";
   }
 });
@@ -27,20 +51,12 @@ tabs.forEach(btn => {
   });
 });
 
-// ====== LOCAL STORAGE HELPERS ======
-function getData(key) {
-  return JSON.parse(localStorage.getItem(key)) || [];
-}
-function saveData(key, data) {
-  localStorage.setItem(key, JSON.stringify(data));
-}
-
 // ====== NOTES ======
 function renderNotes() {
   const notes = getData("notes");
   const container = document.getElementById("notesList");
   container.innerHTML = "";
-  notes.sort((a,b) => b.pinned - a.pinned); // pinned on top
+  notes.sort((a,b) => b.pinned - a.pinned);
   notes.forEach((note, index) => {
     const card = document.createElement("div");
     card.className = "card";
@@ -174,48 +190,28 @@ function editItem(type, index) {
   renderAll();
 }
 
-function renderAll() {
-  renderNotes();
-  renderBookmarks();
-  renderVideos();
-}
-renderAll();
-
-// ====== SEARCH ======
-document.getElementById("searchInput").addEventListener("input", (e) => {
-  const query = e.target.value.toLowerCase();
-  document.querySelectorAll(".card").forEach(card => {
-    card.style.display = card.innerText.toLowerCase().includes(query) ? "flex" : "none";
-  });
-});
-
-
-let currentProfile = localStorage.getItem('currentProfile') || 'defaultUser';
-document.getElementById('profileName').value = currentProfile;
-
-function getKey(key) {
-  return `${key}_${currentProfile}`;
-}
-
-// Override getData & saveData to use currentProfile
-function getData(key) {
-  return JSON.parse(localStorage.getItem(getKey(key))) || [];
-}
-function saveData(key, data) {
-  localStorage.setItem(getKey(key), JSON.stringify(data));
-}
-
-// Switch profile
+// ====== PROFILE SWITCH ======
 function switchProfile() {
   const name = document.getElementById('profileName').value.trim();
   if (!name) return alert("Profile name cannot be empty!");
   currentProfile = name;
   localStorage.setItem('currentProfile', currentProfile);
+
+  // Apply theme for new profile
+  const savedTheme = localStorage.getItem(getKey('theme'));
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark');
+    themeToggle.textContent = "☀️ Light Mode";
+  } else {
+    document.body.classList.remove('dark');
+    themeToggle.textContent = "🌙 Dark Mode";
+  }
+
   renderAll();
   alert(`Switched to profile: ${currentProfile}`);
 }
 
-// Export current profile data
+// ====== EXPORT / IMPORT ======
 function exportData() {
   const data = {
     notes: getData('notes'),
@@ -232,7 +228,6 @@ function exportData() {
   URL.revokeObjectURL(url);
 }
 
-// Import data for current profile
 function importData(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -243,8 +238,25 @@ function importData(event) {
     if (data.bookmarks) saveData('bookmarks', data.bookmarks);
     if (data.videos) saveData('videos', data.videos);
     if (data.theme) localStorage.setItem(getKey('theme'), data.theme);
+
+    // Apply imported theme
+    const importedTheme = localStorage.getItem(getKey('theme'));
+    if (importedTheme === 'dark') document.body.classList.add('dark');
+    else document.body.classList.remove('dark');
+
     renderAll();
     alert(`Data imported successfully for profile: ${currentProfile}`);
   };
   reader.readAsText(file);
 }
+
+// ====== SEARCH ======
+document.getElementById("searchInput").addEventListener("input", (e) => {
+  const query = e.target.value.toLowerCase();
+  document.querySelectorAll(".card").forEach(card => {
+    card.style.display = card.innerText.toLowerCase().includes(query) ? "flex" : "none";
+  });
+});
+
+// ====== INITIAL RENDER ======
+renderAll();
