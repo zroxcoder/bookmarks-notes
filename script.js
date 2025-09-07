@@ -1,16 +1,17 @@
 // ====== THEME TOGGLE ======
 const themeToggle = document.getElementById("themeToggle");
-if (localStorage.getItem("theme") === "dark") {
+if (localStorage.getItem('theme_defaultUser') === "dark") {
   document.body.classList.add("dark");
   themeToggle.textContent = "☀️ Light Mode";
 }
+
 themeToggle.addEventListener("click", () => {
   document.body.classList.toggle("dark");
   if (document.body.classList.contains("dark")) {
-    localStorage.setItem("theme", "dark");
+    localStorage.setItem('theme_' + currentProfile, "dark");
     themeToggle.textContent = "☀️ Light Mode";
   } else {
-    localStorage.setItem("theme", "light");
+    localStorage.setItem('theme_' + currentProfile, "light");
     themeToggle.textContent = "🌙 Dark Mode";
   }
 });
@@ -27,7 +28,7 @@ tabs.forEach(btn => {
   });
 });
 
-// ====== PROFILE & LOCAL STORAGE ======
+// ====== PROFILE ======
 let currentProfile = localStorage.getItem('currentProfile') || 'defaultUser';
 document.getElementById('profileName').value = currentProfile;
 
@@ -41,15 +42,6 @@ function getData(key) {
 
 function saveData(key, data) {
   localStorage.setItem(getKey(key), JSON.stringify(data));
-}
-
-function switchProfile() {
-  const name = document.getElementById('profileName').value.trim();
-  if (!name) return alert("Profile name cannot be empty!");
-  currentProfile = name;
-  localStorage.setItem('currentProfile', currentProfile);
-  renderAll();
-  alert(`Switched to profile: ${currentProfile}`);
 }
 
 // ====== NOTES ======
@@ -72,6 +64,7 @@ function renderNotes() {
     container.appendChild(card);
   });
 }
+
 function addNote() {
   const input = document.getElementById("noteInput");
   if (!input.value.trim()) return;
@@ -102,6 +95,7 @@ function renderBookmarks() {
     container.appendChild(card);
   });
 }
+
 function addBookmark() {
   const title = document.getElementById("bookmarkTitle").value.trim();
   const url = document.getElementById("bookmarkURL").value.trim();
@@ -134,6 +128,7 @@ function renderVideos() {
     container.appendChild(card);
   });
 }
+
 function addVideo() {
   const title = document.getElementById("videoTitle").value.trim();
   const url = document.getElementById("videoURL").value.trim();
@@ -153,12 +148,14 @@ function deleteItem(type, index) {
   saveData(type, data);
   renderAll();
 }
+
 function togglePin(type, index) {
   const data = getData(type);
   data[index].pinned = !data[index].pinned;
   saveData(type, data);
   renderAll();
 }
+
 function editItem(type, index) {
   const data = getData(type);
   if (type === "notes") {
@@ -191,7 +188,16 @@ document.getElementById("searchInput").addEventListener("input", (e) => {
   });
 });
 
-// ====== EXPORT / IMPORT ======
+// ====== PROFILE ======
+function switchProfile() {
+  const name = document.getElementById('profileName').value.trim();
+  if (!name) return alert("Profile name cannot be empty!");
+  currentProfile = name;
+  localStorage.setItem('currentProfile', currentProfile);
+  renderAll();
+  alert(`Switched to profile: ${currentProfile}`);
+}
+
 function exportData() {
   const data = {
     profileName: currentProfile,
@@ -232,3 +238,18 @@ function importData(event) {
   };
   reader.readAsText(file);
 }
+
+// ====== RELOAD LATEST VERSION ======
+const reloadBtn = document.getElementById('reloadBtn');
+reloadBtn.addEventListener('click', () => {
+  // Append a timestamp to CSS & JS to force reload
+  const version = new Date().getTime();
+
+  // Reload CSS
+  document.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
+    link.href = link.href.split('?')[0] + '?v=' + version;
+  });
+
+  // Reload JS (reloads page to apply new JS)
+  location.reload();
+});

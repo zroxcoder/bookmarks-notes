@@ -4,13 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Notes & Bookmarks Manager</title>
-  <link rel="stylesheet" href="style.css">
+
+  <!-- Auto cache-busting -->
+  <script>
+    const version = new Date().getTime(); // unique timestamp
+    const head = document.head;
+
+    const cssLink = document.createElement("link");
+    cssLink.rel = "stylesheet";
+    cssLink.href = `style.css?v=${version}`;
+    head.appendChild(cssLink);
+
+    const jsScript = document.createElement("script");
+    jsScript.src = `script.js?v=${version}`;
+    head.appendChild(jsScript);
+  </script>
 </head>
 <body>
-  <header>
-    <h1>📚 My Knowledge Manager</h1>
+ <header>
+  <h1>📚 My Knowledge Manager</h1>
+  <div>
     <button id="themeToggle">🌙 Dark Mode</button>
-  </header>
+    <button id="reloadBtn">🔄 Reload Latest</button>
+  </div>
+</header>
 
   <!-- Profile Section -->
   <section id="profileSection" class="profile-section">
@@ -61,7 +78,5 @@
   <footer>
     <p>Made with ❤️ | Open Source on GitHub</p>
   </footer>
-
-  <script src="script.js"></script>
 </body>
 </html>
