@@ -128,3 +128,12 @@ main {
 #profile button:hover {
   background: #0056b3;
 }
+
+
+#profile {
+  display: none; /* hide by default */
+}
+
+#profile.active {
+  display: block; /* show when the tab is active */
+}
