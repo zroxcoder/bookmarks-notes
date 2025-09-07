@@ -48,6 +48,7 @@ function renderNotes() {
       <span>${note.text}</span>
       <div>
         <button onclick="togglePin('notes', ${index})">${note.pinned ? "📌 Unpin" : "📍 Pin"}</button>
+        <button onclick="editItem('notes', ${index})">✏️ Edit</button>
         <button onclick="deleteItem('notes', ${index})">❌</button>
       </div>
     `;
@@ -77,6 +78,7 @@ function renderBookmarks() {
       <a href="${bm.url}" target="_blank">${bm.title}</a>
       <div>
         <button onclick="togglePin('bookmarks', ${index})">${bm.pinned ? "📌 Unpin" : "📍 Pin"}</button>
+        <button onclick="editItem('bookmarks', ${index})">✏️ Edit</button>
         <button onclick="deleteItem('bookmarks', ${index})">❌</button>
       </div>
     `;
@@ -108,6 +110,7 @@ function renderVideos() {
       <a href="${vid.url}" target="_blank">${vid.title}</a>
       <div>
         <button onclick="togglePin('videos', ${index})">${vid.pinned ? "📌 Unpin" : "📍 Pin"}</button>
+        <button onclick="editItem('videos', ${index})">✏️ Edit</button>
         <button onclick="deleteItem('videos', ${index})">❌</button>
       </div>
     `;
@@ -136,6 +139,37 @@ function deleteItem(type, index) {
 function togglePin(type, index) {
   const data = getData(type);
   data[index].pinned = !data[index].pinned;
+  saveData(type, data);
+  renderAll();
+}
+
+// ====== EDIT FUNCTION ======
+function editItem(type, index) {
+  const data = getData(type);
+
+  if (type === "notes") {
+    const newText = prompt("Edit your note:", data[index].text);
+    if (newText) data[index].text = newText;
+  }
+
+  if (type === "bookmarks") {
+    const newTitle = prompt("Edit bookmark title:", data[index].title);
+    const newURL = prompt("Edit bookmark URL:", data[index].url);
+    if (newTitle && newURL) {
+      data[index].title = newTitle;
+      data[index].url = newURL;
+    }
+  }
+
+  if (type === "videos") {
+    const newTitle = prompt("Edit video title:", data[index].title);
+    const newURL = prompt("Edit video URL:", data[index].url);
+    if (newTitle && newURL) {
+      data[index].title = newTitle;
+      data[index].url = newURL;
+    }
+  }
+
   saveData(type, data);
   renderAll();
 }
