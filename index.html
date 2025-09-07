@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes & Bookmarks Manager</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>📚 My Knowledge Manager</h1>
+    <button id="themeToggle">🌙 Dark Mode</button>
+  </header>
+
+  <nav>
+    <button class="tab-btn active" data-tab="notes">📝 Notes</button>
+    <button class="tab-btn" data-tab="bookmarks">🔖 Bookmarks</button>
+    <button class="tab-btn" data-tab="videos">🎬 Videos</button>
+  </nav>
+
+  <section id="search">
+    <input type="text" id="searchInput" placeholder="Search...">
+  </section>
+
+  <main>
+    <!-- Notes -->
+    <section id="notes" class="tab active">
+      <h2>Notes</h2>
+      <textarea id="noteInput" placeholder="Write your note..."></textarea>
+      <button onclick="addNote()">Add Note</button>
+      <div id="notesList" class="item-list"></div>
+    </section>
+
+    <!-- Bookmarks -->
+    <section id="bookmarks" class="tab">
+      <h2>Bookmarks</h2>
+      <input type="text" id="bookmarkTitle" placeholder="Title">
+      <input type="url" id="bookmarkURL" placeholder="https://example.com">
+      <button onclick="addBookmark()">Add Bookmark</button>
+      <div id="bookmarksList" class="item-list"></div>
+    </section>
+
+    <!-- Videos -->
+    <section id="videos" class="tab">
+      <h2>Videos</h2>
+      <input type="text" id="videoTitle" placeholder="Video Title">
+      <input type="url" id="videoURL" placeholder="YouTube/Vimeo link">
+      <button onclick="addVideo()">Add Video</button>
+      <div id="videosList" class="item-list"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Made with ❤️ | Open Source on GitHub</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

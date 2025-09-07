@@ -1,0 +1,100 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+:root {
+  --bg: #ffffff;
+  --text: #222;
+  --card-bg: #f4f4f4;
+}
+
+body.dark {
+  --bg: #1e1e1e;
+  --text: #f4f4f4;
+  --card-bg: #2a2a2a;
+}
+
+header {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--card-bg);
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.tab-btn {
+  padding: 0.5rem 1rem;
+  margin: 0 5px;
+  border: none;
+  cursor: pointer;
+  background: var(--card-bg);
+  color: var(--text);
+  border-radius: 6px;
+}
+
+.tab-btn.active {
+  background: #0078ff;
+  color: white;
+}
+
+#search {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+#search input {
+  padding: 0.5rem;
+  width: 80%;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+main {
+  flex: 1;
+  padding: 1rem;
+}
+
+.tab {
+  display: none;
+}
+
+.tab.active {
+  display: block;
+}
+
+.item-list {
+  margin-top: 1rem;
+}
+
+.card {
+  background: var(--card-bg);
+  padding: 1rem;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card button {
+  margin-left: 5px;
+  cursor: pointer;
+}
