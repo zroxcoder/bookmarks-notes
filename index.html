@@ -12,6 +12,16 @@
     <button id="themeToggle">🌙 Dark Mode</button>
   </header>
 
+  <!-- Profile Section -->
+  <section id="profile" style="text-align:center; margin: 1rem 0;">
+    <label for="profileName">Profile Name:</label>
+    <input type="text" id="profileName" placeholder="Enter profile name" value="defaultUser">
+    <button onclick="switchProfile()">Switch Profile</button>
+    <button onclick="exportData()">💾 Export Profile</button>
+    <input type="file" id="importFile" style="display:none" onchange="importData(event)">
+    <button onclick="document.getElementById('importFile').click()">📂 Import Profile</button>
+  </section>
+
   <nav>
     <button class="tab-btn active" data-tab="notes">📝 Notes</button>
     <button class="tab-btn" data-tab="bookmarks">🔖 Bookmarks</button>

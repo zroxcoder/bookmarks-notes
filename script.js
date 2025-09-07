@@ -188,3 +188,63 @@ document.getElementById("searchInput").addEventListener("input", (e) => {
     card.style.display = card.innerText.toLowerCase().includes(query) ? "flex" : "none";
   });
 });
+
+
+let currentProfile = localStorage.getItem('currentProfile') || 'defaultUser';
+document.getElementById('profileName').value = currentProfile;
+
+function getKey(key) {
+  return `${key}_${currentProfile}`;
+}
+
+// Override getData & saveData to use currentProfile
+function getData(key) {
+  return JSON.parse(localStorage.getItem(getKey(key))) || [];
+}
+function saveData(key, data) {
+  localStorage.setItem(getKey(key), JSON.stringify(data));
+}
+
+// Switch profile
+function switchProfile() {
+  const name = document.getElementById('profileName').value.trim();
+  if (!name) return alert("Profile name cannot be empty!");
+  currentProfile = name;
+  localStorage.setItem('currentProfile', currentProfile);
+  renderAll();
+  alert(`Switched to profile: ${currentProfile}`);
+}
+
+// Export current profile data
+function exportData() {
+  const data = {
+    notes: getData('notes'),
+    bookmarks: getData('bookmarks'),
+    videos: getData('videos'),
+    theme: localStorage.getItem(getKey('theme'))
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${currentProfile}_backup.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Import data for current profile
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const data = JSON.parse(e.target.result);
+    if (data.notes) saveData('notes', data.notes);
+    if (data.bookmarks) saveData('bookmarks', data.bookmarks);
+    if (data.videos) saveData('videos', data.videos);
+    if (data.theme) localStorage.setItem(getKey('theme'), data.theme);
+    renderAll();
+    alert(`Data imported successfully for profile: ${currentProfile}`);
+  };
+  reader.readAsText(file);
+}
