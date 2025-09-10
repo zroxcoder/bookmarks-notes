@@ -253,3 +253,20 @@ reloadBtn.addEventListener('click', () => {
   // Reload JS (reloads page to apply new JS)
   location.reload();
 });
+
+
+function renderProfilePage() {
+  const profile = getProfileData();
+  document.getElementById("profilePic").src = profile.pic || "default-avatar.png";
+  document.getElementById("profileName").textContent = profile.name || "Unnamed";
+  document.getElementById("profileBio").textContent = profile.bio || "";
+  document.getElementById("profileEmail").textContent = profile.email || "";
+  document.getElementById("profileAddress").textContent = profile.address || "";
+}
+
+// Open profile page when clicking 👤 button
+document.getElementById("openProfile").addEventListener("click", () => {
+  document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
+  document.getElementById("profilePage").classList.add("active");
+  renderProfilePage();
+});
