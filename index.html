@@ -21,15 +21,33 @@
   </script>
 </head>
 <body>
- <header>
-  <h1>📚 My Knowledge Manager</h1>
-  <div>
-    <button id="themeToggle">🌙 Dark Mode</button>
-   <button id="reloadBtn">🔄 Reload Latest</button>
-  </div>
-</header>
+  <!-- Header -->
+  <header>
+    <h1>📚 My Knowledge Manager</h1>
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <button id="themeToggle">🌙 Dark Mode</button>
+      <button id="reloadBtn">🔄 Reload Latest</button>
 
-  <!-- Profile Section -->
+      <!-- Profile Logo -->
+      <button id="profileBtn" class="profile-btn">
+        <img src="default-avatar.png" alt="Profile" id="profileLogo">
+      </button>
+    </div>
+  </header>
+
+  <!-- Profile Panel -->
+  <section id="profilePanel" class="profile-card" style="display:none;">
+    <img src="default-avatar.png" alt="Profile Picture" id="profileImage">
+    <h3 id="profileDisplayName">Your Name</h3>
+    <p id="profileBio">Bio: Not set</p>
+    <p id="profileEmail">Email: Not set</p>
+    <p id="profileAddress">Address: Not set</p>
+    <p id="profileEducation">Education: Not set</p>
+    <p id="profileWork">Work: Not set</p>
+    <button onclick="editProfile()">Edit Profile</button>
+  </section>
+
+  <!-- Profile Section (for import/export/switching) -->
   <section id="profileSection" class="profile-section">
     <input type="text" id="profileName" placeholder="Enter profile name">
     <button onclick="switchProfile()">Switch Profile</button>
@@ -37,16 +55,19 @@
     <input type="file" id="importFile" accept=".json" onchange="importData(event)">
   </section>
 
+  <!-- Navigation Tabs -->
   <nav>
     <button class="tab-btn active" data-tab="notes">📝 Notes</button>
     <button class="tab-btn" data-tab="bookmarks">🔖 Bookmarks</button>
     <button class="tab-btn" data-tab="videos">🎬 Videos</button>
   </nav>
 
+  <!-- Search -->
   <section id="search">
     <input type="text" id="searchInput" placeholder="Search...">
   </section>
 
+  <!-- Main Content -->
   <main>
     <!-- Notes -->
     <section id="notes" class="tab active">
@@ -75,7 +96,7 @@
     </section>
   </main>
 
-  
+  <!-- Footer -->
   <footer>
     <p>Made with ❤️ | Open Source on GitHub</p>
   </footer>

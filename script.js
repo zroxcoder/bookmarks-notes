@@ -255,3 +255,61 @@ reloadBtn.addEventListener('click', () => {
 });
 
 
+// ====== PROFILE PANEL ======
+const profileBtn = document.createElement('button');
+profileBtn.className = 'profile-btn';
+profileBtn.innerHTML = '👤'; // Default icon, can replace with image
+document.querySelector('header div').appendChild(profileBtn);
+
+const profileCard = document.createElement('div');
+profileCard.className = 'profile-card';
+profileCard.style.display = 'none';
+document.body.insertBefore(profileCard, document.querySelector('main'));
+
+// Default user profile data
+let userProfile = JSON.parse(localStorage.getItem('userProfile_' + currentProfile)) || {
+  picture: '',
+  name: currentProfile,
+  bio: '',
+  email: '',
+  address: '',
+  education: '',
+  work: ''
+};
+
+// Function to render profile panel
+function renderProfile() {
+  profileCard.innerHTML = `
+    <img src="${userProfile.picture || 'https://via.placeholder.com/100'}" alt="Profile Picture">
+    <h3>${userProfile.name}</h3>
+    <p><strong>Bio:</strong> ${userProfile.bio}</p>
+    <p><strong>Email:</strong> ${userProfile.email}</p>
+    <p><strong>Address:</strong> ${userProfile.address}</p>
+    <p><strong>Education:</strong> ${userProfile.education}</p>
+    <p><strong>Work:</strong> ${userProfile.work}</p>
+    <button onclick="editProfile()">Edit Profile</button>
+  `;
+}
+
+// Function to edit profile
+function editProfile() {
+  const picture = prompt("Profile Picture URL:", userProfile.picture);
+  const name = prompt("Name:", userProfile.name);
+  const bio = prompt("Bio:", userProfile.bio);
+  const email = prompt("Email:", userProfile.email);
+  const address = prompt("Address:", userProfile.address);
+  const education = prompt("Education:", userProfile.education);
+  const work = prompt("Work:", userProfile.work);
+
+  userProfile = { picture, name, bio, email, address, education, work };
+  localStorage.setItem('userProfile_' + currentProfile, JSON.stringify(userProfile));
+  renderProfile();
+}
+
+// Show/hide profile panel
+profileBtn.addEventListener('click', () => {
+  profileCard.style.display = profileCard.style.display === 'none' ? 'block' : 'none';
+});
+
+// Render profile on load
+renderProfile();
