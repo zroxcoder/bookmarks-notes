@@ -1157,6 +1157,23 @@
             }
         }
 
+        async function editBookmark(id) {
+            try {
+                const bookmarks = await getAllData('bookmarks');
+                const bookmark = bookmarks.find(b => b.id === parseInt(id));
+                if (bookmark) {
+                    document.getElementById('bookmarkId').value = bookmark.id;
+                    document.getElementById('bookmarkTitle').value = bookmark.title;
+                    document.getElementById('bookmarkUrl').value = bookmark.url;
+                    document.getElementById('bookmarkPinned').checked = bookmark.pinned || false;
+                    document.getElementById('bookmarkModalTitle').textContent = 'Edit Bookmark';
+                    openModal('bookmarkModal');
+                }
+            } catch (error) {
+                console.error('Error editing bookmark:', error);
+            }
+        }
+
         // Videos functionality (similar to notes and bookmarks)
         async function loadVideos() {
             try {
@@ -1260,6 +1277,23 @@
             } catch (error) {
                 console.error('Error saving video:', error);
                 return false;
+            }
+        }
+
+        async function editVideo(id) {
+            try {
+                const videos = await getAllData('videos');
+                const video = videos.find(v => v.id === parseInt(id));
+                if (video) {
+                    document.getElementById('videoId').value = video.id;
+                    document.getElementById('videoTitle').value = video.title;
+                    document.getElementById('videoUrl').value = video.url;
+                    document.getElementById('videoPinned').checked = video.pinned || false;
+                    document.getElementById('videoModalTitle').textContent = 'Edit Video';
+                    openModal('videoModal');
+                }
+            } catch (error) {
+                console.error('Error editing video:', error);
             }
         }
 
