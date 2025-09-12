@@ -1174,6 +1174,17 @@
             }
         }
 
+        async function deleteBookmark(id) {
+            try {
+                if (confirm('Are you sure you want to delete this bookmark?')) {
+                    await deleteData('bookmarks', parseInt(id));
+                    await loadBookmarks();
+                }
+            } catch (error) {
+                console.error('Error deleting bookmark:', error);
+            }
+        }
+
         // Videos functionality (similar to notes and bookmarks)
         async function loadVideos() {
             try {
@@ -1294,6 +1305,17 @@
                 }
             } catch (error) {
                 console.error('Error editing video:', error);
+            }
+        }
+
+        async function deleteVideo(id) {
+            try {
+                if (confirm('Are you sure you want to delete this video?')) {
+                    await deleteData('videos', parseInt(id));
+                    await loadVideos();
+                }
+            } catch (error) {
+                console.error('Error deleting video:', error);
             }
         }
 
