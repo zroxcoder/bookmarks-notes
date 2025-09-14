@@ -1644,10 +1644,14 @@
             document.querySelectorAll('.settings-tab').forEach(tab => {
                 tab.classList.remove('active');
             });
-            
+
             // Show selected panel and activate tab
-            document.getElementById(tabName).classList.add('active');
-            document.querySelector(`.settings-tab[data-tab="${tabName}"]`).classList.add('active');
+            const panel = document.getElementById(tabName);
+            const tab = document.querySelector(`.settings-tab[data-tab="${tabName}"]`);
+            if (panel && tab) {
+                panel.classList.add('active');
+                tab.classList.add('active');
+            }
         }
 
         // REMOVE or COMMENT OUT this block to fix the About & Help error:
