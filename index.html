@@ -1198,6 +1198,20 @@
             }
         }
 
+        async function togglePinBookmark(id) {
+            try {
+                const bookmarks = await getAllData('bookmarks');
+                const bookmark = bookmarks.find(b => b.id === parseInt(id));
+                if (bookmark) {
+                    bookmark.pinned = !bookmark.pinned;
+                    await updateData('bookmarks', bookmark);
+                    await loadBookmarks();
+                }
+            } catch (error) {
+                console.error('Error toggling pin status:', error);
+            }
+        }
+
         // Videos functionality (similar to notes and bookmarks)
         async function loadVideos() {
             try {
@@ -1329,6 +1343,20 @@
                 }
             } catch (error) {
                 console.error('Error deleting video:', error);
+            }
+        }
+
+        async function togglePinVideo(id) {
+            try {
+                const videos = await getAllData('videos');
+                const video = videos.find(v => v.id === parseInt(id));
+                if (video) {
+                    video.pinned = !video.pinned;
+                    await updateData('videos', video);
+                    await loadVideos();
+                }
+            } catch (error) {
+                console.error('Error toggling pin status:', error);
             }
         }
 
