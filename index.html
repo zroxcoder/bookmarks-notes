@@ -1650,7 +1650,8 @@
             document.querySelector(`.settings-tab[data-tab="${tabName}"]`).classList.add('active');
         }
 
-        /* About & Help Section */
+        // REMOVE or COMMENT OUT this block to fix the About & Help error:
+        /*
         const aboutSection = document.getElementById('about');
         const aboutTab = document.querySelector('.settings-tab[data-tab="about"]');
 
@@ -1669,7 +1670,8 @@
                     });
             }
         });
-// ...existing code...
+        */
+
 // Close sidebar when clicking outside
 document.addEventListener('click', (e) => {
     const sidebar = document.getElementById('sidebar');
@@ -1690,7 +1692,6 @@ document.addEventListener('click', (e) => {
         closeSidebar();
     }
 });
-// ...existing code...
         async function calculateStorageUsage() {
             // This is a simplified estimation
             // In a real app, you would use the StorageManager API if available
