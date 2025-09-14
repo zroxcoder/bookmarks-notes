@@ -132,30 +132,118 @@
             object-fit: cover;
         }
 
-        /* Navigation */
-        nav {
-            background-color: var(--card-bg);
-            padding: 10px 0;
-            margin-bottom: 20px;
-        }
-
-        .nav-list {
-            display: flex;
-            list-style: none;
-            justify-content: center;
-            gap: 30px;
-        }
-
-        .nav-item {
-            padding: 8px 16px;
-            border-radius: 20px;
+        /* Hamburger Menu */
+        .hamburger-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
             cursor: pointer;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            margin-left: 10px;
+        }
+
+        /* Sidebar Styles */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100%;
+            background-color: var(--bg-color);
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.active {
+            right: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+        .close-sidebar {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .sidebar-nav {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .sidebar-nav-list {
+            list-style: none;
+        }
+
+        .sidebar-nav-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
             font-weight: 500;
         }
 
-        .nav-item.active {
+        .sidebar-nav-item:hover {
+            background-color: var(--card-bg);
+        }
+
+        .sidebar-nav-item.active {
             background-color: var(--primary-color);
             color: white;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.7;
         }
 
         /* Main Content */
@@ -456,11 +544,6 @@
                 margin: 10px 0;
             }
             
-            .nav-list {
-                flex-wrap: wrap;
-                gap: 10px;
-            }
-            
             .cards-grid {
                 grid-template-columns: 1fr;
             }
@@ -468,6 +551,11 @@
             .profile-header {
                 flex-direction: column;
                 text-align: center;
+            }
+            
+            .sidebar {
+                width: 80%;
+                right: -80%;
             }
         }
 
@@ -515,22 +603,54 @@
                     <div class="profile-btn" id="profileBtn">
                         <img src="https://ui-avatars.com/api/?name=User&background=4285f4&color=fff" alt="Profile" id="profileImage">
                     </div>
+                    <button class="hamburger-btn" id="hamburgerBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <nav>
-        <div class="container">
-            <ul class="nav-list">
-                <li class="nav-item active" data-section="notes">Notes</li>
-                <li class="nav-item" data-section="bookmarks">Bookmarks</li>
-                <li class="nav-item" data-section="videos">Videos</li>
-                <li class="nav-item" data-section="profile">Profile</li>
-                <li class="nav-item" data-section="settings">Settings</li>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i class="fas fa-bezier-curve"></i>
+                <span>ShareHive</span>
+            </div>
+            <button class="close-sidebar" id="closeSidebar">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="sidebar-nav">
+            <ul class="sidebar-nav-list">
+                <li class="sidebar-nav-item active" data-section="notes">
+                    <i class="fas fa-sticky-note"></i>
+                    <span>Notes</span>
+                </li>
+                <li class="sidebar-nav-item" data-section="bookmarks">
+                    <i class="fas fa-bookmark"></i>
+                    <span>Bookmarks</span>
+                </li>
+                <li class="sidebar-nav-item" data-section="videos">
+                    <i class="fas fa-video"></i>
+                    <span>Videos</span>
+                </li>
+                <li class="sidebar-nav-item" data-section="profile">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </li>
+                <li class="sidebar-nav-item" data-section="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </li>
             </ul>
         </div>
-    </nav>
+        <div class="sidebar-footer">
+            <p>ShareHive &copy; 2025</p>
+        </div>
+    </div>
 
     <main class="container">
         <div class="main-content">
@@ -669,10 +789,7 @@
                         </div>
                     </div>
                    
-                    <div class="settings-panel" id="about">
-
-
-     <!-- About & Help -->
+                    <!-- About & Help -->
                     <div class="settings-panel" id="about">
                         <h3>About ShareHive</h3>
                         <p>ShareHive is a personal organization tool that works completely offline. All your data is stored locally in your browser.</p>
@@ -779,6 +896,7 @@
         </div>
     </div>
 
+    
     <footer>
         <div class="container">
             <p>ShareHive &copy; 2025 | Your personal offline organization tool</p>
@@ -1495,26 +1613,26 @@
             document.getElementById('settings-section').classList.remove('active');
             
             // Remove active class from all nav items
-            document.querySelectorAll('.nav-item').forEach(item => {
+            document.querySelectorAll('.sidebar-nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             
             // Show selected section and activate nav item
             if (sectionName === 'notes') {
                 document.getElementById('notes-section').style.display = 'block';
-                document.querySelector('.nav-item[data-section="notes"]').classList.add('active');
+                document.querySelector('.sidebar-nav-item[data-section="notes"]').classList.add('active');
             } else if (sectionName === 'bookmarks') {
                 document.getElementById('bookmarks-section').style.display = 'block';
-                document.querySelector('.nav-item[data-section="bookmarks"]').classList.add('active');
+                document.querySelector('.sidebar-nav-item[data-section="bookmarks"]').classList.add('active');
             } else if (sectionName === 'videos') {
                 document.getElementById('videos-section').style.display = 'block';
-                document.querySelector('.nav-item[data-section="videos"]').classList.add('active');
+                document.querySelector('.sidebar-nav-item[data-section="videos"]').classList.add('active');
             } else if (sectionName === 'profile') {
                 document.getElementById('profile-section').classList.add('active');
-                document.querySelector('.nav-item[data-section="profile"]').classList.add('active');
+                document.querySelector('.sidebar-nav-item[data-section="profile"]').classList.add('active');
             } else if (sectionName === 'settings') {
                 document.getElementById('settings-section').classList.add('active');
-                document.querySelector('.nav-item[data-section="settings"]').classList.add('active');
+                document.querySelector('.sidebar-nav-item[data-section="settings"]').classList.add('active');
             }
         }
 
@@ -1532,6 +1650,47 @@
             document.querySelector(`.settings-tab[data-tab="${tabName}"]`).classList.add('active');
         }
 
+        /* About & Help Section */
+        const aboutSection = document.getElementById('about');
+        const aboutTab = document.querySelector('.settings-tab[data-tab="about"]');
+
+        aboutTab.addEventListener('click', () => {
+            // Load external content for About & Help
+            if (!aboutSection.classList.contains('loaded')) {
+                fetch('about.html')
+                    .then(response => response.text())
+                    .then(data => {
+                        aboutSection.innerHTML = data;
+                        aboutSection.classList.add('loaded');
+                    })
+                    .catch(error => {
+                        console.error('Error loading about content:', error);
+                        aboutSection.innerHTML = '<p>Failed to load content. Please try again later.</p>';
+                    });
+            }
+        });
+// ...existing code...
+// Close sidebar when clicking outside
+document.addEventListener('click', (e) => {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const closeSidebarBtn = document.getElementById('closeSidebar');
+
+    // Don't close if clicking the hamburger or close button
+    if (
+        sidebar.classList.contains('active') &&
+        !sidebar.contains(e.target) &&
+        !overlay.contains(e.target) &&
+        e.target !== hamburgerBtn &&
+        !hamburgerBtn.contains(e.target) &&
+        e.target !== closeSidebarBtn &&
+        !closeSidebarBtn.contains(e.target)
+    ) {
+        closeSidebar();
+    }
+});
+// ...existing code...
         async function calculateStorageUsage() {
             // This is a simplified estimation
             // In a real app, you would use the StorageManager API if available
@@ -1644,13 +1803,32 @@
             }
         }
 
+        // Sidebar functionality
+        function openSidebar() {
+            document.getElementById('sidebar').classList.add('active');
+            document.getElementById('sidebarOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling when sidebar is open
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('active');
+            document.getElementById('sidebarOverlay').classList.remove('active');
+            document.body.style.overflow = ''; // Re-enable scrolling
+        }
+
         // Setup event listeners
         function setupEventListeners() {
-            // Navigation
-            document.querySelectorAll('.nav-item').forEach(item => {
+            // Hamburger menu
+            document.getElementById('hamburgerBtn').addEventListener('click', openSidebar);
+            document.getElementById('closeSidebar').addEventListener('click', closeSidebar);
+            document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
+            
+            // Sidebar navigation
+            document.querySelectorAll('.sidebar-nav-item').forEach(item => {
                 item.addEventListener('click', (e) => {
                     const section = e.currentTarget.getAttribute('data-section');
                     switchSection(section);
+                    closeSidebar();
                 });
             });
             
