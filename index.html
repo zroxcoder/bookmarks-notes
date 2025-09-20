@@ -1579,7 +1579,71 @@
             });
         }
 
-        // Similar functions for bookmarks and videos would be implemented
+        function displayFilteredBookmarks(bookmarks) {
+            const bookmarksGrid = document.getElementById('bookmarksGrid');
+            bookmarksGrid.innerHTML = '';
+
+            if (bookmarks.length === 0) {
+                bookmarksGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <h3>No matching bookmarks found</h3>
+                    </div>
+                `;
+                return;
+            }
+
+            bookmarks.forEach(bookmark => {
+                const bookmarkElement = document.createElement('div');
+                bookmarkElement.className = `card ${bookmark.pinned ? 'pinned' : ''}`;
+                bookmarkElement.innerHTML = `
+                    <div class="card-header">
+                        <h3 class="card-title">${bookmark.title}</h3>
+                    </div>
+                    <div class="card-content">
+                        <p><a href="${bookmark.url}" target="_blank">${bookmark.url}</a></p>
+                    </div>
+                `;
+                bookmarksGrid.appendChild(bookmarkElement);
+            });
+        }
+
+        function displayFilteredVideos(videos) {
+            const videosGrid = document.getElementById('videosGrid');
+            videosGrid.innerHTML = '';
+
+            if (videos.length === 0) {
+                videosGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <h3>No matching videos found</h3>
+                    </div>
+                `;
+                return;
+            }
+
+            videos.forEach(video => {
+                let videoThumbnail = '';
+                if (video.url.includes('youtube.com') || video.url.includes('youtu.be')) {
+                    const videoId = video.url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+                    if (videoId) {
+                        videoThumbnail = `https://img.youtube.com/vi/${videoId[1]}/0.jpg`;
+                    }
+                }
+                const videoElement = document.createElement('div');
+                videoElement.className = `card ${video.pinned ? 'pinned' : ''}`;
+                videoElement.innerHTML = `
+                    <div class="card-header">
+                        <h3 class="card-title">${video.title}</h3>
+                    </div>
+                    <div class="card-content">
+                        ${videoThumbnail ? `<img src="${videoThumbnail}" alt="${video.title}" style="width: 100%; border-radius: 8px; margin-bottom: 10px;">` : ''}
+                        <p><a href="${video.url}" target="_blank">${video.url}</a></p>
+                    </div>
+                `;
+                videosGrid.appendChild(videoElement);
+            });
+        }
 
         // Utility functions
         function debounce(func, wait) {
